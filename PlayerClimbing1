@@ -41,7 +41,13 @@ public class PlayerClimbing1 : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit))
             {
-                transform.forward = -hit.normal;
+                Quaternion targetRotation = Quaternion.LookRotation(-hit.normal);
+
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    targetRotation,
+                    5f * Time.fixedDeltaTime);
+                // the above code FIXES THE SNAPPING TO FACES yay
                 rb.position = Vector3.Lerp(rb.position, hit.point + hit.normal * 0.51f, 10f * Time.fixedDeltaTime);
             }
 
